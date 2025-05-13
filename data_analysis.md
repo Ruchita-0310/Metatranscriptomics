@@ -35,5 +35,9 @@ done
 
 echo "Finished concatenating files and running seal.sh."
 ```
-Use annotated bins [sqlite.py](https://github.com/Wednesdaysama/Metatranscriptomics/blob/main/sqlite.py)
-
+Use annotated bins [sqlite.py](https://github.com/Wednesdaysama/Metatranscriptomics/blob/main/sqlite.py). I have made a few changes in the code for single bin annotation. 
+To use sqlite.py you need to follow:
+```
+conda create -n test_env
+pip install metaerg
+```
