@@ -24,7 +24,7 @@ do
     echo "Running seal.sh on $merged_file..."
     seal.sh \
       in="$merged_file" \
-      ref="/work/ebg_lab/gm/RS/Cyano-three-peaks-pacBio/PL4/Refinement_pypolca_PL4/metawrap_50_10_bins/*.fa" \
+      ref="/work/ebg_lab/gm/RS/Cyano-three-peaks-pacBio/PL4/metaerg/bin13.annotations.fa" \
       stats="sealstats_${sample}_${read}.txt"  \
       rpkm="sealrpkm_${sample}_${read}.txt" \
       ambig=random
@@ -35,3 +35,5 @@ done
 
 echo "Finished concatenating files and running seal.sh."
 ```
+Use annotated bins [sqlite.py](https://github.com/Wednesdaysama/Metatranscriptomics/blob/main/sqlite.py)
+
