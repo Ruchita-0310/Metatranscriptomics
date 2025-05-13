@@ -39,5 +39,15 @@ Use annotated bins [sqlite.py](https://github.com/Wednesdaysama/Metatranscriptom
 To use sqlite.py you need to follow:
 ```
 conda create -n test_env
+conda activate test_env
 pip install metaerg
+python3 sqlite.py
+```
+Now that you have Reads Per Kilobase Million (RPKM), you need to convert that into Transcript Per Million (TPM). You could use [tpm_calculator.py](https://github.com/Ruchita-0310/Metatranscriptomics/blob/main/tpm_calculator.py).              
+```
+conda create new_env
+conda activate new_env
+conda install pandas
+conda install openpyxl
+python3 tmp_calculator.py
 ```
