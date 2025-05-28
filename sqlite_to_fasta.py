@@ -8,7 +8,7 @@ annotations_dir = working_dir / "annotations.sqlite"
 
 print(f"{annotations_dir}")
 
-for sqlite_file in annotations_dir.glob("bin*sqlite"):
+for sqlite_file in annotations_dir.glob("bin*"):
     print(f"\nProcessing file: {sqlite_file.name}")
     fa_filename = sqlite_file.with_suffix('.fa')
     print(f"Creating FASTA file: {fa_filename.name}")
