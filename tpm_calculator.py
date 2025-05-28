@@ -2,6 +2,16 @@ import os
 import pandas as pd
 
 def calculate_tpm(filepath):
+    """
+    Calculates Transcripts Per Million (TPM) from a file containing gene expression data.
+
+    Args:
+        filepath (str): Path to the input file.
+
+    Returns:
+        pandas.DataFrame: A DataFrame with gene names and their corresponding TPM values,
+                          or None if the file doesn't contain the required columns.
+    """
     try:
         df = pd.read_csv(filepath, sep='\t', skiprows=4)
     except FileNotFoundError:
@@ -16,11 +26,51 @@ def calculate_tpm(filepath):
         print(f"Error: File {filepath} is missing required columns: {required_columns}")
         return None
 
+    # Calculate Reads Per Kilobase (RPK)
     df['RPK'] = (df['Reads'] / df['Length']) * 1000
+
+    # Calculate scaling factor for TPM normalization
     per_million_scaling_factor = df['RPK'].sum() / 1e6
+
+    # Calculate Transcripts Per Million (TPM)
     df['TPM'] = df['RPK'] / per_million_scaling_factor
+
+    # Extract the required columns
     result_df = df[['#Name', 'TPM']].copy()
     return result_df
+
+def process_files(directory):
+    """
+    Processes all relevant files in the given directory to calculate TPM and
+    merges the results into a single DataFrame.
+
+    Args:
+        directory (str): Path to the directory containing the input files.
+
+    Returns:
+         pandas.DataFrame: A DataFrame containing TPM values for all processed samples,
+                          or None if no valid files were found.
+    """
+    all_results = []
+    for filename in os.listdir(directory):
+        if filename.startswith("sealrpkm_") and filename.endswith(".txt"):
+            filepath = os.path.join(directory, filename)
+            result_df = calculate_tpm(filepath)
+            if result_df is not None:  # Only process valid files
+                sample_name = os.path.splitext(filename)[0]
+                result_df = result_df.rename(columns={'TPM': sample_name})
+                all_results.append(result_df)
+
+    if not all_results:
+        print("No valid 'sealrpkm_*.txt' files found to process.")
+        return None
+
+    # Merge all DataFrames on '#Name'
+    tpm_all = all_results[0]
+    for df in all_results[1:]:
+        tpm_all = pd.merge(tpm_all, df, on='#Name', how='outer')
+    tpm_all = tpm_all.fillna(0)  # Fill NaN values with 0
+    return tpm_all
 
 def save_results(df, output_path):
     """
@@ -36,24 +86,13 @@ def save_results(df, output_path):
     except Exception as e:
         print(f"Error saving to Excel: {e}")
 
-def process_files(directory):
-    """
-    Processes all .tsv files in the directory and returns a combined TPM DataFrame.
-    """
-    combined_df = pd.DataFrame()
-    for file in os.listdir(directory):
-        if file.endswith(".tsv"):
-            filepath = os.path.join(directory, file)
-            tpm_df = calculate_tpm(filepath)
-            if tpm_df is not None:
-                tpm_df['Sample'] = os.path.splitext(file)[0]
-                combined_df = pd.concat([combined_df, tpm_df], ignore_index=True)
-    return combined_df
-
 if __name__ == "__main__":
-    work_dir = os.path.dirname(os.path.abspath(__file__))
+    work_dir = os.path.dirname(os.path.abspath(__file__))  # Use current directory
+    # If you want to use a specific directory, uncomment and modify the line below.
+    # work_dir = r"D:\OneDrive - University of Calgary\Exp_Sediment\Experiments\Molecular_biology\2025_Apr\seal"
+
     tpm_all_df = process_files(work_dir)
-    if tpm_all_df is not None and not tpm_all_df.empty:
+    if tpm_all_df is not None:
         tpm_all_path = os.path.join(work_dir, "tpm_all.xlsx")
         save_results(tpm_all_df, tpm_all_path)
     print("Done.")
