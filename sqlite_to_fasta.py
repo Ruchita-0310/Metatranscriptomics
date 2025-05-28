@@ -4,7 +4,7 @@ import os
 
 # the working_dir is path/to/metaerg/directory
 working_dir = Path(os.getcwd())
-annotations_dir = working_dir 
+annotations_dir = working_dir / "annotations.sqlite"
 
 print(f"{annotations_dir}")
 
