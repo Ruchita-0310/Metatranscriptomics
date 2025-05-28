@@ -1,6 +1,13 @@
 # 1. Mapping
 [Seal.sh - BBMap](https://archive.jgi.doe.gov/data-and-tools/software-tools/bbtools/bb-tools-user-guide/seal-guide/)
 ```
+#!/bin/bash
+
+# Expand the .fa reference files into a comma-separated list
+ref_files=$(ls /work/ebg_lab/gm/RS/metatranscriptomics/ref_seq/*.fa | tr '\n' ',')
+ref_files=${ref_files%,}  # Remove trailing comma
+
+# Loop through your samples
 for sample in RS-PL4-1-RNA_S15 RS-PL4-2-RNA_S16 RS-PL4-3-RNA_S17
 do
   # Loop through the read pairs (R1 and R2)
@@ -14,17 +21,19 @@ do
 
     # Check if the input files exist
     if [ -f "$file1" ] && [ -f "$file2" ]; then
-      # Concatenate the files using cat and gzip
+      # Concatenate the files using cat
       cat "$file1" "$file2" > "$merged_file"
       echo "Merged $file1 and $file2 into $merged_file"
     else
       echo "Error: One or both of the input files ($file1, $file2) do not exist for sample $sample and read $read. Skipping."
+      continue
     fi
-# Run seal.sh
+
+    # Run seal.sh
     echo "Running seal.sh on $merged_file..."
     seal.sh \
       in="$merged_file" \
-      ref="/work/ebg_lab/gm/RS/Cyano-three-peaks-pacBio/PL4/metaerg/bin13.annotations.fa" \
+      ref="$ref_files" \
       stats="sealstats_${sample}_${read}.txt"  \
       rpkm="sealrpkm_${sample}_${read}.txt" \
       ambig=random
