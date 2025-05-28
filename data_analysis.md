@@ -49,5 +49,5 @@ conda create new_env
 conda activate new_env
 conda install pandas
 conda install openpyxl
-python3 tmp_calculator.py
+python3 tpm_calculator.py
 ```
