@@ -35,13 +35,13 @@ done
 
 echo "Finished concatenating files and running seal.sh."
 ```
-Use annotated bins [sqlite.py](https://github.com/Wednesdaysama/Metatranscriptomics/blob/main/sqlite.py). I have made a few changes in the code for single bin annotation [sqlite_to_fasta.py](https://github.com/Ruchita-0310/Metatranscriptomics/blob/main/sqlite_to_fasta.py).        
-To use sqlite.py you need to follow:
+Use annotated bins [sqlite_to_fasta.py](https://github.com/Ruchita-0310/Metatranscriptomics/blob/main/sqlite_to_fasta.py).        
+To use sqlite_to_fasta.py you need to follow:
 ```
 conda create -n test_env
 conda activate test_env
 pip install metaerg
-python3 sqlite.py
+python3 sqlite_to_fasta.py
 ```
 Now that you have Reads Per Kilobase Million (RPKM), you need to convert that into Transcript Per Million (TPM). You could use [tpm_calculator.py](https://github.com/Ruchita-0310/Metatranscriptomics/blob/main/tpm_calculator.py).              
 ```
