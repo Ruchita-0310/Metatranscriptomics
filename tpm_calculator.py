@@ -87,10 +87,7 @@ def save_results(df, output_path):
         print(f"Error saving to Excel: {e}")
 
 if __name__ == "__main__":
-    work_dir = os.path.dirname(os.path.abspath(__file__))  # Use current directory
-    # If you want to use a specific directory, uncomment and modify the line below.
-    # work_dir = r"D:\OneDrive - University of Calgary\Exp_Sediment\Experiments\Molecular_biology\2025_Apr\seal"
-
+    work_dir = os.path.dirname(os.path.abspath(__file__))  
     tpm_all_df = process_files(work_dir)
     if tpm_all_df is not None:
         tpm_all_path = os.path.join(work_dir, "tpm_all.xlsx")
