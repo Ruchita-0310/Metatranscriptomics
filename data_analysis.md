@@ -63,7 +63,7 @@ python3 tpm_calculator.py
 # 2. MMSeqs2
 ```
 cat *.faa > soda_proteins.faa
-onda activate mmseq2
+conda activate mmseq2
 mmseqs createdb soda_proteins.faa ./soda_proteins.mmseqdb
 mmseqs cluster -c 0.8 --cov-mode 0 --min-seq-id 0.98 soda_proteins.mmseqdb soda_proteins.clustering ./tmp
 mmseqs createtsv soda_proteins.mmseqdb soda_proteins.mmseqdb soda_proteins.clustering new_soda_proteins.clustering.tsv
